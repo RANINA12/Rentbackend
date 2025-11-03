@@ -52,16 +52,16 @@ io.on('connection', (socket) => {
 // Middleware to parse JSON and handle CORS
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://rentmaintain3.vercel.app/"
+  "https://rentmaintain3.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     } else {
+      console.log("❌ Blocked by CORS:", origin);
       return callback(new Error("Not allowed by CORS"));
     }
   },
@@ -69,6 +69,10 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// 👇 Add this line
+app.options('*', cors());
+
 
 // --- END OF FIX ---
 
